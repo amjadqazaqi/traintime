@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Sign-Up Today!</title>
+    <title>The train</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
@@ -82,7 +82,7 @@
                                 <input class="form-control" id="frequency-input" type="text">
                             </div>
                             <button class="btn btn-default" id="add-train" type="submit">Submit</button>
-                            <button class="btn btn-default" id="test" type="submit">ok</button>
+                           
                         </form>
                     </div>
                 </div>
@@ -107,11 +107,10 @@
 
     <!-- Script -->
     <script>
-        //  START CODING BELOW!!
+        var returedhurs = 0;
+        var returnedmin = 0;
+        var minaway = 0;
 
-        // Initialize Firebase
-
-        // Initialize Firebase
         var config = {
             apiKey: "AIzaSyC4AhesYq8zRcZiit_jZj7AEjIP4v2kyiw",
             authDomain: "alqazqi123.firebaseapp.com",
@@ -171,21 +170,83 @@
 
 
         $("#test").on("click", function (event) {
-            // var randomDate =  new Date();
-            //  randomDate = Date.now() ;
-            var day = "03/16/18 01:58"
-            var cuu = moment();
-            var randomFormat = "MM/DD/YYYY hh:mm:ss";
-            var convertedDate = moment(day, randomFormat);
-            var now  = "04/09/2013 15:00:00";
-var then = "02/09/2013 14:20:30";
 
-var ms = moment(now,"DD/MM/YYYY HH:mm:ss").diff(moment(then,"DD/MM/YYYY HH:mm:ss"));
-var d = moment.duration(ms);
-alert(moment())
-
+            caltime();
         });
 
+
+        function caltime(x, y) {
+            var today = new Date();
+            var today2 = new Date();
+
+            var time = today.getHours() + ":" + today.getMinutes();
+
+
+            var valuestart = x
+            var valuestop = time
+
+            //create date format          
+            var timeStart = new Date("01/01/2007 " + valuestart);
+            var timeEnd = new Date("01/01/2007 " + valuestop);
+
+            var difference = timeEnd - timeStart;
+
+            difference = (difference / 60 / 60 / 1000) * 60;
+            var q = difference / y;
+            var r = (((Math.floor(q))) + 1) * y
+            var absmin = Math.floor(r / 60);
+            var lftmin = (r / 60) - absmin;
+            lftmin = Math.ceil(lftmin * 60);
+            var myhours = 0;
+            var myminutes = timeStart.getMinutes() + lftmin;
+
+            today2.setMinutes(myminutes)
+
+
+
+            today2.setHours(timeStart.getHours() + absmin)
+            console.log(absmin, lftmin);
+            // console.log(time+timem);
+            console.log(timeStart.getHours(), timeStart.getMinutes());
+            console.log(today2.getHours(), today2.getMinutes());
+            returedhurs = today2.getHours();
+            returnedmin = today2.getMinutes();
+
+
+
+
+
+
+        }
+        function minaway1(a1) {
+            var today = new Date();
+
+
+            var time = today.getHours() + ":" + today.getMinutes();
+
+
+            var valuestart = a1
+            var valuestop = time
+
+            //create date format          
+            var timeStart = new Date("01/01/2007 " + valuestart);
+            var timeEnd = new Date("01/01/2007 " + valuestop);
+
+            var difference =  timeStart-timeEnd;
+            difference = (difference / 60 / 60 / 1000) * 60;
+            minaway=difference;
+
+        }
+
+
+
+        function diff_minutes(dt2, dt1) {
+
+            var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+            diff /= 60;
+            return Math.abs(Math.round(diff));
+
+        }
         database.ref().on("child_added", function (snapshot) {
 
             // var m =snapshot.val().trainName;
@@ -195,6 +256,7 @@ alert(moment())
             var c = snapshot.val().firstTrainTime
             var d = snapshot.val().frequency
             // 6 years ago
+
 
             console.log(snapshot.val().trainName, snapshot.val().destination, snapshot.val().firstTrainTime, snapshot.val().frequency)
             addrow(a, b, c, d)
@@ -211,8 +273,10 @@ alert(moment())
 
         function addrow(a, b, c, d, e) {
 
+            caltime(c, d);
+            minaway1(returedhurs + ":" + returnedmin)
 
-            $("#mytable").append('<tr><td>' + a + '</td> <td>' + b + '</td><td>' + d + '</td><td>' + c + '</td></tr>')
+            $("#mytable").append('<tr><td>' + a + '</td> <td>' + b + '</td><td>' + d + '</td><td>' + returedhurs + ":" + returnedmin + '</td><td>' + minaway + '</td><td>')
 
             /*   var tr = $("<tr>"),
                td = $("<td>").appendTo(tr), 
